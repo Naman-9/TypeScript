@@ -1,9 +1,11 @@
+// --------------------------------------------------------------
 //  ------------  to "DEFINE Type Explicitily"
 let nambo = <string>'name';
 let nam: string = 'name';
 // more than one type
 let surname: string | number = 32;
 
+// --------------------------------------------------------------
 //  ------------  For "FUNCTIONS"
 // can define the "return" type of of functions
 // inCase we don't know - "generics"
@@ -12,6 +14,7 @@ const func = (n: number, m: string): number => {
   return 0;
 };
 
+// --------------------------------------------------------------
 //  ------------  "TYPE Alias"
 // for a var can define custom datatype
 type UserName = (n: number, m: number) => number;
@@ -20,6 +23,7 @@ const func1: UserName = (n, m) => {
   return n + m;
 };
 
+// --------------------------------------------------------------
 // ------------  "ARRAY'S"
 // if array is defined hover on it
 const arr = [12, 24, 36, 48, '45'];
@@ -31,9 +35,11 @@ const arr1: (string | number)[] = [12, 24, 36, 48];
 // prefer this type
 const arr2: Array<string | number> = [];
 
+// --------------------------------------------------------------
 // ------------ "TUPLES" (fixed size array)
 const tup: [number, number, number] = [12, 24, 36];
 
+// --------------------------------------------------------------
 // ------------ "OBJECTS"
 
 // option 1
@@ -49,7 +55,7 @@ const obj: {
 type Obj = {
   height: number;
   weight: number;
-  gender?: string; // gender is now optional "?"
+  gender?: string;      // gender is now optional "?"
 };
 
 const obj1: Obj = {
@@ -58,6 +64,7 @@ const obj1: Obj = {
   gender: 'M',
 };
 
+// --------------------------------------------------------------
 // ------------ "INTERFACE" ------------
 // it's like class
 // use it when needed to work with "Class" / "Object"
@@ -88,6 +95,8 @@ const testInt: NewObj = {
 // testInt?.func(20, 20);     -- this wil give undefined "?" remove it
 testInt.func(20, 20);
 
+
+// --------------------------------------------------------------
 // ------------ "FUNCTIONS"
 
 type UserName2 = (a: number, m: number, l?: number) => number | string;
@@ -98,6 +107,8 @@ const func2: UserName2 = (n, m, l) => {
   return n + m;
 };
 
+
+// --------------------------------------------------------------
 // ------------Rest Operator (...m:Number[])
 type UserName3 = (a: number, m: number, l?: number) => number | string;
 
@@ -107,7 +118,7 @@ const func3 = (...m: number[]) => {
 func3(2, 3, 4, 5, 6, 7, 8);
 
 // OR
-type UserName4 = (...m: number[]) => number[]; // --
+type UserName4 = (...m: number[]) => number[]; 
 const func4: UserName4 = (...m) => {
   return m;
 };
@@ -118,6 +129,7 @@ function test(n: number): number {
   return 45;
 }
 
+// --------------------------------------------------------------
 // ------------"Functions with Object"
 // will get "product" as Object
 
@@ -146,6 +158,8 @@ const productOne: ProductType = {
 
 getData(productOne);
 
+
+// --------------------------------------------------------------
 // ------------ "NEVER TYPE"
 //  in case of error "Never is returned" [if using throw]
 const errorHandler = (): never => {
@@ -193,6 +207,8 @@ class Player2 {
 const player2 = new Player2(100, 150, 12);
 console.log('id', player2.id);
 
+
+// --------------------------------------------------------------
 //  ----------Inheritance
 class Player3 extends Player2 {
   special: boolean;
@@ -238,6 +254,8 @@ class Product implements ProductType2 {
   
 }
 
+
+// --------------------------------------------------------------
 // Good Way to do above 
 
 interface ProductType3 {
@@ -264,6 +282,7 @@ interface GiveId {
   }
 
 
+// --------------------------------------------------------------
 //  -----------[DOM manipulation] ------------
 // ------------ TYPE ASSERTION -------- (Bp mt sika)
 
@@ -310,13 +329,14 @@ const getEmail = ():string => {
 console.log(myObj.name);
 
 // to make one function
+// dynamic keys
 const getData3 = (key: string): string => {
     return myObj[key];
 }
 
 //  cannot do this way 
 // 2 options to do this 
-// 1- dynamic Key
+// 1- dynamic Key  ----------------------------------------------
 interface Person2 {
     [key: string] : string;
 }
@@ -342,17 +362,20 @@ const getData4 = (key: keyof Person): string => {
     return myObj[key];
 }
 
+
+// --------------------------------------------------------------
 // ---------"UTILITY TYPES"---------
 // EASE OF ACCESS
-// ---Partial <Type> -- make "type" optional.
+// ---1-Partial <Type> -- make "type" optional.
 type User= {
     name: string,
     eamil: string
 }
 
-type User1 = Partial<User>;
+type User1 = Partial<User>;         // --
 
-// ---Required <Type>  -- make "type" required
+// ------------------------------------------------
+// ---2-Required <Type>  -- make "type" required
 type User2= {
     name?: string,
     amil?: string
@@ -360,8 +383,249 @@ type User2= {
 
 type User3 = Required<User>;
 
-// Readonly
+// ------------------------------------------------
+// ---3-Readonly
+type User4 = Readonly<User>;
 
+// ------------------------------------------------
+// ---4- Record<keys, Type> [when all keys are of same type]
+type User5 = {
+  name: string;
+  email: string;
+  gender:string;
+}
+
+type User6 = Record<"name"| "email"|"gender","string">
+
+
+// EXAMPLE
+interface UserInfo {
+  age: number;
+}
+
+type UserName5 = "john"| "david" | "elon";
+
+const users: Record<UserName5,UserInfo> = {
+  john: {age: 34},
+  david: {age: 34},
+  elon: {age: 34},
+
+}
+// USE WHEN NEED TO MATCH TO DATA
+ 
+// ------------------------------------------------
+// ---5- PICK<TYPE, KEYS>
+//  pick which one needed
+interface OrderInfo{
+  readonly id: string;
+  user: string;
+  city: string;
+  state: string;
+  country: string;
+  status: string
+} 
+
+type ShippingInfo = Pick<OrderInfo, "city"| "state"| "country">
+
+// ------------------------------------------------
+// ---6- OMIT<TYPE, KEYS>
+//  leave which one are not needed
+interface OrderInfo2{
+  readonly id: string;
+  user: string;
+  city: string;
+  state: string;
+  country: string;
+  status: string
+} 
+
+type ShippingInfo2 = Omit<OrderInfo2, "user"| "id">
+
+// -------------------------------------------------
+// ---7- EXCLUDE<TYPE, EXCLUDE UNION>
+type MyUnion = string | number | boolean;
+type Random = Exclude<MyUnion, number>;
+// From "MyUnion" remove/subtract "number"
+// 
+
+// -------------------------------------------------
+// ---8- EXTRACT<TYPE, UNONION>
+type MyUnion2 = string | number | boolean;
+type Random2 = Extract<MyUnion, number>;
+// From "MyUnion" take only "number"
+
+// ------------------------------------------------
+// ---9- NonNullable <Type>
+type MyUnion3 = string| number| boolean | null | undefined;
+type Random3 = NonNullable<MyUnion3> 
+// this will REMOVE "undefined" and "null"
+type Random4 = Exclude<MyUnion3, undefined | null>
+
+
+// ------------------------------------------------
+// ---10- Parameters<Type>
+const myfunc2 = (a:number, b:string) => {
+  console.log(a + b);
+}
+
+type Random5 = Parameters<typeof myfunc2>
+// This will give us the "parameters" of any function 
+
+// ------------------------------------------------
+// ---11- ConstructorParameters<Type>
+class SampleClass {
+  constructor(public a: string, public t: string) { 
+  }
+}
+
+type Random6 = ConstructorParameters<typeof SampleClass>
+
+
+// ------------------------------------------------
+// ---12- ReturnType<Type>
+// To know the type of any function
+const myfunc3 = (a:number, b:string):string => {
+  console.log(a + b);
+  return a+b;
+}
+type funcType = ReturnType<typeof myfunc3>
+class SampleClass2 {
+  constructor(public a: string, public t: string) { 
+  }
+}
+
+type Random7 = ConstructorParameters<typeof SampleClass2>
+
+// ------------------------------------------------
+// ---13- Instance<Type>
+// to extract the instance type of a constructor function or class type.
+class Person3{
+  constructor(
+    public name: string,
+    public age: number,
+  )
+}
+
+type Person3Instance = InstanceType<typeof Person3>;
+
+// ------------------------------------------------
+// ------GENERICS 
+// 
+
+// --problem--
+const func5 = (n: number): number => {
+  return n;
+}
+
+const ans = func5(20);
+
+// ===> this will work inCase we know the type but problem arise when we don't know the type
+//  any: will work ==> but then, there will be no benifit of typeScript
+// -- This is where "GENERICS" comes into the game.
+
+const func6 = <CustomGeneric>(n: CustomGeneric): CustomGeneric => {
+  return n; 
+}
+
+const test1 = func6(20);
+const test2 = func6("20");
+const test3 = func6(true);
+
+// ====> "CustomGeneric" -> is like a placeholder whatever we will send it will be replaced with that
+// like:: test1 -> number : number, test2 -> string : string
+
+type Person4 = {
+  name: string,
+  age: number
+}
+
+const func7 = <T>(n: T): T => {
+  return n; 
+}
+
+const person1: Person4 = {
+  name:"NAMAN",
+  age: 21
+}
+
+const ans2 = func7<String>(person1);
+// this will give errror as we have declared the function as "string" so 
+// we need to pass a string not the type"string"
+
+const ans3 = func7<Person4>(person1);
+
+ans3. // this way can exccess person
+
+const arr3: number[] = [];
+ 
+
+const func8 = <T, U>(n: T, m: U): object => {
+  return {n,m}; 
+}
+
+// this will tell return 
+const func9 = <T, U>(n: T, m: U): {n: T, m: U} => {
+  return {n,m}; 
+}
+
+// to extend 
+type Person5 = {
+  name: string,
+  age: number,
+  email: string
+}
+
+const user: Person4 ={
+  name:"Naman",
+  age: 21,
+}
+const user2: Person5 = {
+  name:"Naman",
+  age: 21,
+  email: "@gmail.com",
+}
+
+const func10 = <T, U extends T>(n: T, m: U): {n: T, m: U} => {
+  return {n,m}; 
+}
+ 
+const test4 = func10<Person4, Person5>(user, user2);
+
+// -----------
+// -- Use of Generics
+type PeopleData = {
+  name:  string,
+  age: number
+}
+
+const users2: PeopleData[] = [
+  {
+    name:"Naman",
+    age: 21,
+  },
+  {
+    name:"user1",
+    age: 23,
+  },
+  {
+    name:"user2",
+    age: 21,
+  }
+];
+
+const filterByPeoples = < T, U extends keyof T> (
+  // U extends keyof T ==> object ka key
+  arr: T[],
+  property: U,
+  value: T[U]
+): T[] => {
+  return arr.filter((item) => item[property] === value);
+}
+
+// ---->
+const filterByPeopleName = filterByPeoples(users2, "name", "Naman");
+const filterByPeopleAge = filterByPeoples(users2, "age", 21);
+ 
 
 
 /**
